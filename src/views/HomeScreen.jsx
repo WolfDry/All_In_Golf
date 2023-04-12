@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Text, StyleSheet, View, Pressable, Image, ScrollView, TouchableOpacity } from 'react-native';
+import { Text, StyleSheet, View, Pressable, Image, ScrollView, TouchableOpacity, ImageBackground } from 'react-native';
 import { useFonts } from 'expo-font';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import globalStyles from '../../assets/globalStyle';
@@ -28,125 +28,42 @@ export function HomeScreen({ navigation, route }) {
     }
 
     return (
-        <ScrollView style={styles.container}>
-            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+        <ImageBackground source={require('../../assets/img/bg.jpg')} style={globalStyles.fullScreen}>
+            <View style={[globalStyles.fullScreen, globalStyles.center]}>
                 <Image
                     style={styles.logo}
-                    source={require('../../assets/img/favicon.png')}
+                    source={require('../../assets/img/logo-vert.jpg')}
                 />
             </View>
-            <View style={styles.titleContainer}>
-                <Text style={styles.title}>
-                    All In Golf
-                </Text>
+            <View style={[globalStyles.fullScreen, globalStyles.center]}>
+                <Text style={[globalStyles.title, globalStyles.white]}>All In Golf</Text>
             </View>
-            <View style={styles.formContainer}>
-                <Pressable
-                    style={styles.Loginbutton}
-                    onPress={() => {
-                        // Pass and merge params back to home screen
-                        navigation.navigate({
-                            name: 'Login',
-                            params: {
-                                post: {
-                                    login: loginPost,
-                                    password: passwordPost
-                                }
-                            },
-                            merge: true,
-                        });
-                    }}
-                >
-                    <Text style={[globalStyles.white, globalStyles.hongkong]}>Se connecter</Text>
+            <View style={[globalStyles.fullScreen, globalStyles.center]}>
+                <Pressable style={[styles.button, globalStyles.center, { marginBottom: 15 }]} onPress={() => navigation.navigate('Login')}>
+                    <Text style={[globalStyles.hongkong]}>
+                        Se connecter
+                    </Text>
                 </Pressable>
-                <Pressable
-                    style={styles.Loginbutton}
-                    onPress={() => {
-                        // Pass and merge params back to home screen
-                        navigation.navigate({
-                            name: 'Register',
-                            params: {
-                                post: {
-                                    login: loginPost,
-                                    password: passwordPost
-                                }
-                            },
-                            merge: true,
-                        });
-                    }}
-                >
-                    <Text style={[globalStyles.white, globalStyles.hongkong]}>S'enregister</Text>
+                <Pressable style={[styles.button, globalStyles.center]} onPress={() => navigation.navigate('Register')}>
+                    <Text style={[globalStyles.hongkong]}>
+                        Créer un compte
+                    </Text>
                 </Pressable>
             </View>
-            {auth.currentUser &&
-                <View>
-                    <Text style={globalStyles.white}>Email : {auth.currentUser?.email}</Text>
-                    <TouchableOpacity onPress={handleSignUp} style={{ backgroundColor: '#36A970', padding: 10, margin: 10 }}>
-                        <Text style={[globalStyles.white]}>Sign Out</Text>
-                    </TouchableOpacity>
-                </View>
-            }
-
-        </ScrollView>
+        </ImageBackground>
     );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        fontFamily: 'Broadway',
-        height: 500,
-        borderColor: 'red',
-        backgroundColor: 'black'
-    },
     logo: {
-        width: 100,
-        height: 100,
-        marginTop: 80
+        width: 150,
+        height: 150,
+        borderRadius: 100,
     },
-    titleContainer: {
-        flex: 0.5,
-        alignItems: 'center',
-    },
-    title: {
-        padding: 50,
-        fontFamily: 'Broadway',
-        fontSize: 30,
-        color: 'white'
-    },
-    formContainer: {
-        flex: 1,
-        alignItems: 'center',
-    },
-    inputContainer: {
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-    inputs: {
-        margin: 5,
-        padding: 10,
-        width: 200,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 10,
-        backgroundColor: 'white'
-    },
-    Loginbutton: {
-        marginVertical: 25,
-        padding: 15,
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: 270,
-        borderRadius: 50,
-        backgroundColor: '#36A970',
-    },
-    arrowBack: {
-        margin: 60
-    },
-    registerContainer: {
-        alignItems: 'center',
-        justifyContent: 'flex-end',
-        backgroundColor: 'black',
-        height: 10
+    button: {
+        width: '75%',
+        backgroundColor: 'white',
+        padding: '3%',
+        borderRadius: 100,
     }
 });

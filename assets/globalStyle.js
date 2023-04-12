@@ -6,8 +6,26 @@ const globalStyles = StyleSheet.create({
   },
   white: {
     color: 'white',
-    height: 20
-}
+  },
+  center: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  fullScreen: {
+    flex: 1,
+    width: '100%'
+  },
+  title: {
+      fontSize: 30,
+      fontFamily: 'Broadway',
+  },
+  borderBottom:{
+    borderWidth: 1,
+    borderRightWidth:0,
+    borderLeftWidth:0,
+    borderTopWidth:0,
+    borderBottomColor: 'white',
+  }
 });
 
 export default globalStyles;
