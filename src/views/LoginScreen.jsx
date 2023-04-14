@@ -8,6 +8,7 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 
 export function LoginScreen({ navigation, route }) {
 
+    const [isSignIn, SetIsSignIn] = React.useState(false)
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
 
@@ -23,8 +24,9 @@ export function LoginScreen({ navigation, route }) {
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredentials) => {
                 const user = userCredentials.user
+                SetIsSignIn(true)
                 console.log('Logged in with : ' + user.email)
-                navigation.navigate('Home')
+                navigation.navigate('Profile')
             })
             .catch(error => alert(error.message))
     }

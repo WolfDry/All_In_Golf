@@ -5,6 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useFonts } from 'expo-font';
 import { RegisterScreen } from './src/views/RegisterScreen';
+import { ProfileScreen } from './src/views/ProfileScreen';
 
 export default function App() {
 
@@ -51,6 +52,10 @@ export default function App() {
         <Stack.Screen
           name="Register"
           component={RegisterScreen}
+        />
+        <Stack.Screen
+          name="Profile"
+          component={ProfileScreen}
         />
       </Stack.Navigator>
     </NavigationContainer >

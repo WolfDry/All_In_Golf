@@ -7,6 +7,7 @@ import { auth } from '../../firebase'
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 
 export function RegisterScreen({ navigation, route }) {
+
     const [email, setEmail] = React.useState('');
     const [pseudo, setPseudo] = React.useState('');
     const [password, setPassword] = React.useState('');
@@ -20,7 +21,7 @@ export function RegisterScreen({ navigation, route }) {
     }
 
     const handleSignUp = () => {
-        createUserWithEmailAndPassword(auth, email, password, pseudo)
+        createUserWithEmailAndPassword(auth, email, password)
             .then((userCredentials) => {
                 const user = userCredentials.user
                 console.log('Registered in with : ' + user.email)
