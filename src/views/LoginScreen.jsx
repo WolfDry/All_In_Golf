@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { TextInput, Text, StyleSheet, View, Pressable, Image, ScrollView, ImageBackground } from 'react-native';
+import { TextInput, Text, StyleSheet, View, Pressable, Image, ScrollView, ImageBackground, KeyboardAvoidingView } from 'react-native';
 import { useFonts } from 'expo-font';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import globalStyles from '../../assets/globalStyle';
@@ -32,63 +32,69 @@ export function LoginScreen({ navigation, route }) {
     }
 
     return (
-        <ImageBackground source={require('../../assets/img/bg.jpg')} style={[globalStyles.center, globalStyles.fullScreen]}>
-            <View style={[globalStyles.center, { flex: 3, width: '100%' }]}>
-                <Image
-                    style={styles.logo}
-                    source={require('../../assets/img/logo-vert.jpg')}
-                />
-            </View>
-            <View style={[globalStyles.center, globalStyles.fullScreen]}>
-                <Text style={[globalStyles.title, globalStyles.white]}>
-                    Connecte toi
-                </Text>
-            </View>
-            <View style={[globalStyles.center, { flex: 3, width: '100%' }]}>
-                <View style={styles.inputContainer}>
-                    <TextInput
-                        placeholder="Email"
-                        style={[styles.inputs, globalStyles.hongkong]}
-                        value={email}
-                        onChangeText={setEmail}
-                    />
-                    <TextInput
-                        placeholder="Mot de passe"
-                        style={[styles.inputs, globalStyles.hongkong]}
-                        value={password}
-                        onChangeText={setPassword}
-                        secureTextEntry={true}
-                    />
-                </View>
-                <Pressable
-                    style={[styles.button,]}
-                    onPress={handleLogin}
-                >
-                    <Text style={[globalStyles.white, globalStyles.hongkong]}>Connexion</Text>
-                </Pressable>
-                <Pressable style={[globalStyles.fullScreen, globalStyles.center]}>
-                    <Text style={[globalStyles.white, globalStyles.hongkong]}>
-                        Mot de passe oublié ?
-                    </Text>
-                </Pressable>
-            </View>
-            <View style={[globalStyles.center, globalStyles.fullScreen]}>
-                <Ionicons
-                    style={styles.arrowBack}
-                    name="arrow-back-outline"
-                    size={64}
-                    color="white"
-                    onPress={() => navigation.navigate('Home')}
-                />
-            </View>
-            <View style={[globalStyles.center, globalStyles.fullScreen]}>
-                <Pressable onPress={() => navigation.navigate('Register')}>
-                    <Text style={[globalStyles.white, globalStyles.hongkong, globalStyles.borderBottom]}>
-                        Nouveau ? Créer ton compte ici
-                    </Text>
-                </Pressable>
-            </View>
-        </ImageBackground>
+        <KeyboardAvoidingView style={globalStyles.fullScreen}>
+            <ScrollView
+                contentContainerStyle={globalStyles.fullScreen}
+                bounces={false}>
+                <ImageBackground source={require('../../assets/img/bg.jpg')} style={[globalStyles.center, globalStyles.fullScreen]}>
+                    <View style={[globalStyles.center, { flex: 3, width: '100%' }]}>
+                        <Image
+                            style={styles.logo}
+                            source={require('../../assets/img/logo-vert.jpg')}
+                        />
+                    </View>
+                    <View style={[globalStyles.center, globalStyles.fullScreen]}>
+                        <Text style={[globalStyles.title, globalStyles.white]}>
+                            Connecte toi
+                        </Text>
+                    </View>
+                    <View style={[globalStyles.center, { flex: 3, width: '100%' }]}>
+                        <View style={styles.inputContainer}>
+                            <TextInput
+                                placeholder="Email"
+                                style={[styles.inputs, globalStyles.hongkong]}
+                                value={email}
+                                onChangeText={setEmail}
+                            />
+                            <TextInput
+                                placeholder="Mot de passe"
+                                style={[styles.inputs, globalStyles.hongkong]}
+                                value={password}
+                                onChangeText={setPassword}
+                                secureTextEntry={true}
+                            />
+                        </View>
+                        <Pressable
+                            style={[styles.button,]}
+                            onPress={handleLogin}
+                        >
+                            <Text style={[globalStyles.white, globalStyles.hongkong]}>Connexion</Text>
+                        </Pressable>
+                        <Pressable style={[globalStyles.fullScreen, globalStyles.center]}>
+                            <Text style={[globalStyles.white, globalStyles.hongkong]}>
+                                Mot de passe oublié ?
+                            </Text>
+                        </Pressable>
+                    </View>
+                    <View style={[globalStyles.center, globalStyles.fullScreen]}>
+                        <Ionicons
+                            style={styles.arrowBack}
+                            name="arrow-back-outline"
+                            size={64}
+                            color="white"
+                            onPress={() => navigation.navigate('Home')}
+                        />
+                    </View>
+                    <View style={[globalStyles.center, globalStyles.fullScreen]}>
+                        <Pressable onPress={() => navigation.navigate('Register')}>
+                            <Text style={[globalStyles.white, globalStyles.hongkong, globalStyles.borderBottom]}>
+                                Nouveau ? Créer ton compte ici
+                            </Text>
+                        </Pressable>
+                    </View>
+                </ImageBackground>
+            </ScrollView>
+        </KeyboardAvoidingView>
     );
 }
 
@@ -119,65 +125,3 @@ const styles = StyleSheet.create({
         borderRadius: 100,
     }
 })
-
-// const styles = StyleSheet.create({
-//     container: {
-//         flex: 1,
-//         width: '100%',
-//         height: '100%',
-//     },
-//     background: {
-//         height: '100%'
-//     },
-//     logo: {
-//         width: 150,
-//         height: 150,
-//         marginTop: '15%',
-//         marginBottom: '13.2%',
-//         borderRadius: 100
-//     },
-//     titleContainer: {
-//         flex: 0.5,
-//         alignItems: 'center',
-//     },
-//     title: {
-//         padding: '10%',
-//         fontSize: 30,
-//         fontFamily: 'Broadway',
-//         color: 'white'
-//     },
-//     formContainer: {
-//         flex: 1,
-//         alignItems: 'center',
-//     },
-//     inputContainer: {
-//         justifyContent: 'center',
-//         alignItems: 'center'
-//     },
-//     inputs: {
-//         margin: '2%',
-//         padding: '3%',
-//         width: 225,
-//         justifyContent: 'center',
-//         alignItems: 'center',
-//         borderRadius: 10,
-//         backgroundColor: 'white'
-//     },
-//     button: {
-//         marginVertical: '10%',
-//         padding: '3%',
-//         justifyContent: 'center',
-//         alignItems: 'center',
-//         width: '75%',
-//         borderRadius: 100,
-//         backgroundColor: '#36A970',
-//     },
-//     arrowBack: {
-//         marginVertical: '5%',
-//     },
-//     registerContainer: {
-//         alignItems: 'center',
-//         justifyContent: 'flex-end',
-//         marginBottom: '10%'
-//     }
-// });

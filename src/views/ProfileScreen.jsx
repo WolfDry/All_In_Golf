@@ -3,7 +3,7 @@ import { View, Text, Image, Pressable, StyleSheet } from "react-native";
 import globalStyles from "../../assets/globalStyle";
 import { Calendar, CalendarList, LocaleConfig } from 'react-native-calendars';
 import { db, auth } from "../../firebase";
-import { collection, getDocs } from "firebase/firestore/lite";
+import { collection, getDocs } from "firebase/firestore";
 
 LocaleConfig.locales['fr'] = {
     monthNames: [
@@ -60,8 +60,6 @@ export function ProfileScreen({ navigation, route }) {
         getCurrentUser().then(setUser)
     }, [])
 
-    // console.log(user.email)
-
     return (
         <View style={[globalStyles.fullScreen, globalStyles.center, { backgroundColor: 'white' }]}>
             <View style={[styles.header, globalStyles.center]}>
@@ -79,7 +77,7 @@ export function ProfileScreen({ navigation, route }) {
             </View>
             <View style={styles.detailsContainer}>
                 <View style={[globalStyles.fullScreen, styles.bubbleContainer]}>
-                    <Text style={[globalStyles.hongkong, { fontSize: 18 }]}>{user && user.nom + ' ' + user.prenom}</Text>
+                    <Text style={[globalStyles.hongkong, { fontSize: 18 }]}>{user && user.pseudo}</Text>
                 </View>
                 <View style={[globalStyles.fullScreen, styles.bubbleContainer]}>
                     <Text style={[globalStyles.hongkong, { fontSize: 10 }]}>
