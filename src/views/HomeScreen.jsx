@@ -39,16 +39,27 @@ export function HomeScreen({ navigation, route }) {
                 <Text style={[globalStyles.title, globalStyles.white]}>All In Golf</Text>
             </View>
             <View style={[globalStyles.fullScreen, globalStyles.center]}>
-                <Pressable style={[styles.button, globalStyles.center, { marginBottom: 15 }]} onPress={() => navigation.navigate('Login')}>
-                    <Text style={[globalStyles.hongkong]}>
-                        Se connecter
-                    </Text>
-                </Pressable>
-                <Pressable style={[styles.button, globalStyles.center]} onPress={() => navigation.navigate('Register')}>
-                    <Text style={[globalStyles.hongkong]}>
-                        Créer un compte
-                    </Text>
-                </Pressable>
+                {auth.currentUser &&
+                    <Pressable style={[styles.button, globalStyles.center, { marginBottom: 15 }]} onPress={() => navigation.navigate('Profile')}>
+                        <Text style={[globalStyles.hongkong]}>
+                            Profil
+                        </Text>
+                    </Pressable>
+                }
+                {!auth.currentUser &&
+                    <View style={[globalStyles.fullScreen, globalStyles.center]}>
+                        <Pressable style={[styles.button, globalStyles.center, { marginBottom: 15 }]} onPress={() => navigation.navigate('Login')}>
+                            <Text style={[globalStyles.hongkong]}>
+                                Se connecter
+                            </Text>
+                        </Pressable>
+                        <Pressable style={[styles.button, globalStyles.center]} onPress={() => navigation.navigate('Register')}>
+                            <Text style={[globalStyles.hongkong]}>
+                                Créer un compte
+                            </Text>
+                        </Pressable>
+                    </View>
+                }
             </View>
         </ImageBackground>
     );

@@ -7,7 +7,7 @@ import { auth, db } from '../../firebase'
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { doc, setDoc } from "firebase/firestore";
 import { strRandom } from '../../assets/func/random';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export function RegisterScreen({ navigation, route }) {
@@ -15,6 +15,7 @@ export function RegisterScreen({ navigation, route }) {
     const [email, setEmail] = React.useState('');
     const [pseudo, setPseudo] = React.useState('');
     const [password, setPassword] = React.useState('');
+    const [id, setId] = React.useState('');
 
     const [loaded] = useFonts({
         Broadway: require('../../assets/fonts/broadway-normal.ttf')
@@ -32,10 +33,27 @@ export function RegisterScreen({ navigation, route }) {
             length: 20,
         })
 
-        await setDoc(doc(db, "users", docRef), {
-            email: email,
-            pseudo: pseudo,
-        });
+        setId(strRandom({
+            includeUpperCase: true,
+            includeNumber: true,
+            length: 20,
+        }))
+
+        try {
+            await setDoc(doc(db, "users", docRef), {
+                email: email,
+                pseudo: pseudo,
+            });
+        } catch (e) {
+            alert(e.message)
+        }
+
+        try {
+            const jsonValue = JSON.stringify(docRef)
+            await AsyncStorage.setItem('@uidUser', jsonValue)
+        } catch (e) {
+            alert(e.message)
+        }
 
         createUserWithEmailAndPassword(auth, email, password)
             .then((userCredentials) => {
@@ -43,7 +61,7 @@ export function RegisterScreen({ navigation, route }) {
                 console.log('Registered in with : ' + user.email)
                 navigation.navigate('Login')
             })
-            .catch(error => alert(error.message))
+            .catch(e => alert(e.message))
     }
 
     return (

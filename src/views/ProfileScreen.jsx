@@ -3,7 +3,8 @@ import { View, Text, Image, Pressable, StyleSheet } from "react-native";
 import globalStyles from "../../assets/globalStyle";
 import { Calendar, CalendarList, LocaleConfig } from 'react-native-calendars';
 import { db, auth } from "../../firebase";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, doc, getDocs, getDoc } from "firebase/firestore";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 LocaleConfig.locales['fr'] = {
     monthNames: [
@@ -49,12 +50,20 @@ export function ProfileScreen({ navigation, route }) {
 
     useEffect(() => {
         async function getCurrentUser() {
-            const usersCollection = collection(db, 'users')
-            const usersSnapshot = await getDocs(usersCollection)
-            const usersList = usersSnapshot.docs.map(doc => doc.data())
-            const currentUser = usersList.filter(user => user.email === auth.currentUser.email)
 
-            return currentUser[0]
+            try {
+                const jsonValue = await AsyncStorage.getItem('@uidUser')
+                const uidUser = jsonValue != null ? JSON.parse(jsonValue) : null;
+
+                const userCollection = doc(db, 'users', uidUser)
+                const userSnapshot = await getDoc(userCollection)
+
+                if (userSnapshot != null) {
+                    return userSnapshot.data()
+                }
+            } catch (e) {
+                alert(e.message)
+            }
 
         }
         getCurrentUser().then(setUser)

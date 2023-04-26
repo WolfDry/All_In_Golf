@@ -5,6 +5,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import globalStyles from '../../assets/globalStyle';
 import { auth } from '../../firebase'
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export function LoginScreen({ navigation, route }) {
 
@@ -20,7 +21,14 @@ export function LoginScreen({ navigation, route }) {
         return null
     }
 
-    const handleLogin = () => {
+    const handleLogin = async () => {
+
+        try {
+            await AsyncStorage.setItem('@isLogin', 'true')
+        } catch (e) {
+            alert(e.message)
+        }
+
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredentials) => {
                 const user = userCredentials.user
