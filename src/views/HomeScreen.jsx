@@ -1,14 +1,11 @@
 import * as React from 'react';
 import { Text, StyleSheet, View, Pressable, Image, ScrollView, TouchableOpacity, ImageBackground } from 'react-native';
 import { useFonts } from 'expo-font';
-import Ionicons from '@expo/vector-icons/Ionicons';
 import globalStyles from '../../assets/globalStyle';
 import { auth } from '../../firebase'
 import { signOut } from 'firebase/auth';
 
 export function HomeScreen({ navigation, route }) {
-    const [loginPost, setLoginPost] = React.useState('');
-    const [passwordPost, setPasswordPost] = React.useState('');
 
     const [loaded] = useFonts({
         Broadway: require('../../assets/fonts/broadway-normal.ttf')

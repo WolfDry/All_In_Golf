@@ -8,6 +8,7 @@ import { RegisterScreen } from './src/views/RegisterScreen';
 import { ProfileScreen } from './src/views/ProfileScreen';
 import { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import LoadingProvider from './src/context/LoadingProvider';
 
 export default function App() {
 
@@ -40,43 +41,45 @@ export default function App() {
   }
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName={initialRouteName} screenOptions={{ headerShown: false }}>
-        <Stack.Screen
-          name="Home"
-          component={HomeScreen}
-          options={{
-            title: 'My home',
-            headerStyle: {
-              backgroundColor: '#f4511e',
-            },
-            headerTintColor: 'black',
-            headerTitleStyle: {
-              fontWeight: 'bold',
-            },
-            headerRight: () => (
-              <Button
-                onPress={() => alert('This is a button!')}
-                title="Info"
-                color="black"
-              />
-            ),
-          }}
-        />
-        <Stack.Screen
-          name="Login"
-          component={LoginScreen}
-        />
-        <Stack.Screen
-          name="Register"
-          component={RegisterScreen}
-        />
-        <Stack.Screen
-          name="Profile"
-          component={ProfileScreen}
-        />
-      </Stack.Navigator>
-    </NavigationContainer >
+    <LoadingProvider>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName={initialRouteName} screenOptions={{ headerShown: false }}>
+          <Stack.Screen
+            name="Home"
+            component={HomeScreen}
+            options={{
+              title: 'My home',
+              headerStyle: {
+                backgroundColor: '#f4511e',
+              },
+              headerTintColor: 'black',
+              headerTitleStyle: {
+                fontWeight: 'bold',
+              },
+              headerRight: () => (
+                <Button
+                  onPress={() => alert('This is a button!')}
+                  title="Info"
+                  color="black"
+                />
+              ),
+            }}
+          />
+          <Stack.Screen
+            name="Login"
+            component={LoginScreen}
+          />
+          <Stack.Screen
+            name="Register"
+            component={RegisterScreen}
+          />
+          <Stack.Screen
+            name="Profile"
+            component={ProfileScreen}
+          />
+        </Stack.Navigator>
+      </NavigationContainer >
+    </LoadingProvider>
   );
 }
 

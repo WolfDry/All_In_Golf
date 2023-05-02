@@ -27,6 +27,10 @@ export function RegisterScreen({ navigation, route }) {
 
     const handleSignUp = async () => {
 
+        setEmail('')
+        setPseudo('')
+        setPassword('')
+
         const docRef = strRandom({
             includeUpperCase: true,
             includeNumber: true,
