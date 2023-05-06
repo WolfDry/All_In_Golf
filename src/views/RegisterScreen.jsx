@@ -32,14 +32,14 @@ export function RegisterScreen({ navigation, route }) {
             length: 20,
         })
 
-        await setDoc(doc(db, "users", docRef), {
-            email: email,
-            pseudo: pseudo,
-        });
-
         createUserWithEmailAndPassword(auth, email, password)
-            .then((userCredentials) => {
+            .then(async (userCredentials) => {
                 const user = userCredentials.user
+                await setDoc(doc(db, "users", docRef), {
+                    uid: user.uid,
+                    email: email,
+                    pseudo: pseudo,
+                });
                 console.log('Registered in with : ' + user.email)
                 navigation.navigate('Login')
             })

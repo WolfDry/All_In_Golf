@@ -1,16 +1,15 @@
-import * as React from 'react';
+import React, { useContext } from 'react';
 import { TextInput, Text, StyleSheet, View, Pressable, Image, ScrollView, ImageBackground, KeyboardAvoidingView } from 'react-native';
 import { useFonts } from 'expo-font';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import globalStyles from '../../assets/globalStyle';
-import { auth } from '../../firebase'
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { AuthContext } from '../context/AuthContext';
 
 export function LoginScreen({ navigation, route }) {
 
-    const [isSignIn, SetIsSignIn] = React.useState(false)
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
+    const { login } = useContext(AuthContext)
 
     const [loaded] = useFonts({
         Broadway: require('../../assets/fonts/broadway-normal.ttf')
@@ -18,17 +17,6 @@ export function LoginScreen({ navigation, route }) {
 
     if (!loaded) {
         return null
-    }
-
-    const handleLogin = () => {
-        signInWithEmailAndPassword(auth, email, password)
-            .then((userCredentials) => {
-                const user = userCredentials.user
-                SetIsSignIn(true)
-                console.log('Logged in with : ' + user.email)
-                navigation.navigate('Profile')
-            })
-            .catch(error => alert(error.message))
     }
 
     return (
@@ -66,7 +54,7 @@ export function LoginScreen({ navigation, route }) {
                         </View>
                         <Pressable
                             style={[styles.button,]}
-                            onPress={handleLogin}
+                            onPress={() => { login(email, password) }}
                         >
                             <Text style={[globalStyles.white, globalStyles.hongkong]}>Connexion</Text>
                         </Pressable>

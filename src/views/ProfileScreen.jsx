@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react";
-import { View, Text, Image, Pressable, StyleSheet } from "react-native";
+import { useEffect, useState, useContext } from "react";
+import { View, Text, Image, Pressable, StyleSheet, ScrollView, ImageBackground } from "react-native";
 import globalStyles from "../../assets/globalStyle";
 import { Calendar, CalendarList, LocaleConfig } from 'react-native-calendars';
 import { db, auth } from "../../firebase";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, query, where, getDocs } from "firebase/firestore";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AuthContext } from '../context/AuthContext';
 
 LocaleConfig.locales['fr'] = {
     monthNames: [
@@ -44,25 +46,31 @@ LocaleConfig.defaultLocale = 'fr';
 
 export function ProfileScreen({ navigation, route }) {
 
-    const [selected, setSelected] = useState('');
+    const [selected, setSelected] = useState('')
     const [user, setUser] = useState()
+    const { logout } = useContext(AuthContext)
 
     useEffect(() => {
         async function getCurrentUser() {
-            const usersCollection = collection(db, 'users')
-            const usersSnapshot = await getDocs(usersCollection)
-            const usersList = usersSnapshot.docs.map(doc => doc.data())
-            const currentUser = usersList.filter(user => user.email === auth.currentUser.email)
+            let userToken = await AsyncStorage.getItem('userToken')
+            const q = query(collection(db, "users"), where("uid", "==", userToken));
 
-            return currentUser[0]
+            const querySnapshot = await getDocs(q);
+            let userData
+            querySnapshot.forEach((doc) => {
+                // doc.data() is never undefined for query doc snapshots
+                userData = doc.data()
+            });
+
+            return userData
 
         }
         getCurrentUser().then(setUser)
     }, [])
 
     return (
-        <View style={[globalStyles.fullScreen, globalStyles.center, { backgroundColor: 'white' }]}>
-            <View style={[styles.header, globalStyles.center]}>
+        <ScrollView style={{ backgroundColor: 'white' }} contentContainerStyle={globalStyles.center}>
+            <ImageBackground source={''} style={[styles.header, globalStyles.center]}>
                 <View style={[styles.bubble, globalStyles.center]}>
                     <Text style={[globalStyles.white, globalStyles.hongkong, { fontSize: 21, textAlign: 'center' }]}>23</Text>
                     <Text style={[globalStyles.white, globalStyles.hongkong, { fontSize: 13, textAlign: 'center' }]}>Parties</Text>
@@ -74,14 +82,14 @@ export function ProfileScreen({ navigation, route }) {
                     <Text style={[globalStyles.white, globalStyles.hongkong, { fontSize: 21, textAlign: 'center' }]}>16</Text>
                     <Text style={[globalStyles.white, globalStyles.hongkong, { fontSize: 13, textAlign: 'center' }]}>Amis</Text>
                 </View>
-            </View>
+            </ImageBackground>
             <View style={styles.detailsContainer}>
                 <View style={[globalStyles.fullScreen, styles.bubbleContainer]}>
-                    <Text style={[globalStyles.hongkong, { fontSize: 18 }]}>{user && user.pseudo}</Text>
+                    <Text style={[globalStyles.hongkong, { fontSize: 18, marginBottom: 15 }]}>{user && user.pseudo}</Text>
                 </View>
                 <View style={[globalStyles.fullScreen, styles.bubbleContainer]}>
                     <Text style={[globalStyles.hongkong, { fontSize: 10 }]}>
-                        {user && user.bio}
+                        {user && user.bio}COucoucoucoucoucoucou
                     </Text>
                 </View>
                 <View style={[globalStyles.fullScreen, styles.bubbleContainer]}>
@@ -89,30 +97,30 @@ export function ProfileScreen({ navigation, route }) {
                 </View>
                 <View style={[globalStyles.fullScreen, styles.buttonContainer]}>
                     <Pressable style={[globalStyles.center, styles.button]}>
-                        <Text style={[globalStyles.hongkong, globalStyles.white, { fontSize: 10 }]}>Modifier le profile</Text>
+                        <Text style={[globalStyles.hongkong, globalStyles.white, { fontSize: 10 }]}>Modifier le profil</Text>
                     </Pressable>
                 </View>
             </View>
-            <View style={{ flex: 0.7, flexDirection: "row", padding: 20 }}>
-                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'flex-start' }}>
+            <View style={styles.badgesContainer}>
+                <View style={styles.badges}>
                     <Image source={require('../../assets/img/badges-partie-joue.png')} />
-                    <Text style={[globalStyles.hongkong, { textAlign: "center", fontSize: 10 }]}>23/50 Parties joués</Text>
+                    <Text style={[globalStyles.hongkong, { textAlign: 'center', fontSize: 10 }]}>23/50 Parties joués</Text>
                     <View style={{ flexDirection: 'row' }}>
                         <Image source={require('../../assets/img/etoile.png')} />
                         <Image source={require('../../assets/img/etoile.png')} />
                     </View>
                 </View>
-                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'flex-end' }}>
+                <View style={[styles.badges, { justifyContent: 'flex-end' }]}>
                     <Image source={require('../../assets/img/badges-partie-joue.png')} />
-                    <Text style={[globalStyles.hongkong, { textAlign: "center", fontSize: 10 }]}>23/50 Parties joués</Text>
+                    <Text style={[globalStyles.hongkong, { textAlign: 'center', fontSize: 10 }]}>23/50 Parties joués</Text>
                     <View style={{ flexDirection: 'row' }}>
                         <Image source={require('../../assets/img/etoile.png')} />
                         <Image source={require('../../assets/img/etoile.png')} />
                     </View>
                 </View>
-                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'flex-start' }}>
+                <View style={styles.badges}>
                     <Image source={require('../../assets/img/badges-partie-joue.png')} />
-                    <Text style={[globalStyles.hongkong, { textAlign: "center", fontSize: 10 }]}>23/50 Parties joués</Text>
+                    <Text style={[globalStyles.hongkong, { textAlign: 'center', fontSize: 10 }]}>23/50 Parties joués</Text>
                     <View style={{ flexDirection: 'row' }}>
                         <Image source={require('../../assets/img/etoile.png')} />
                         <Image source={require('../../assets/img/etoile.png')} />
@@ -120,17 +128,24 @@ export function ProfileScreen({ navigation, route }) {
                     </View>
                 </View>
             </View>
-            <View style={{ flex: 1, padding: 20, backgroundColor: '#f7f7f7' }}>
-                <CalendarList
-                    style={{ width: '100%', borderWidth: 1 }}
+            <View style={{ padding: 20, backgroundColor: '#f7f7f7' }}>
+                <Calendar
+                    style={{ borderWidth: 1 }}
                     onDayPress={day => {
                         setSelected(day.dateString);
                     }}
                     firstDay={1}
-                    enableSwipeMonths={true}
                 />
             </View>
-        </View>
+            <View>
+                <Pressable
+                    style={{ backgroundColor: '#a00404', padding: 10, borderRadius: 100, margin: 20 }}
+                    onPress={() => { logout() }}
+                >
+                    <Text style={globalStyles.white}>Déconnexion</Text>
+                </Pressable>
+            </View>
+        </ScrollView>
     )
 }
 
