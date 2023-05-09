@@ -1,6 +1,5 @@
 import React from 'react'
 import { ProfileScreen } from '../views/ProfileScreen'
-import { HomeScreen } from '../views/HomeScreen'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
 export function AppStack() {

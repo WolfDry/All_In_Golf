@@ -1,20 +1,22 @@
-import * as React from 'react';
+import { useContext, useState } from 'react';
 import { TextInput, Text, StyleSheet, View, Pressable, Image, ImageBackground, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { useFonts } from 'expo-font';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import globalStyles from '../../assets/globalStyle';
 import { auth, db } from '../../firebase'
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { doc, setDoc } from "firebase/firestore";
-import { strRandom } from '../../assets/func/random';
+import { createUserWithEmailAndPassword } from 'firebase/auth'
+import { doc, setDoc } from "firebase/firestore"
+import { strRandom } from '../../assets/func/random'
+import { AuthContext } from '../context/AuthContext';
 
 
 
-export function RegisterScreen({ navigation, route }) {
+export function RegisterScreen({ navigation }) {
 
-    const [email, setEmail] = React.useState('');
-    const [pseudo, setPseudo] = React.useState('');
-    const [password, setPassword] = React.useState('');
+    const [email, setEmail] = useState('');
+    const [pseudo, setPseudo] = useState('');
+    const [password, setPassword] = useState('');
+    const { register } = useContext(AuthContext);
 
     const [loaded] = useFonts({
         Broadway: require('../../assets/fonts/broadway-normal.ttf')
@@ -22,28 +24,6 @@ export function RegisterScreen({ navigation, route }) {
 
     if (!loaded) {
         return null
-    }
-
-    const handleSignUp = async () => {
-
-        const docRef = strRandom({
-            includeUpperCase: true,
-            includeNumber: true,
-            length: 20,
-        })
-
-        createUserWithEmailAndPassword(auth, email, password)
-            .then(async (userCredentials) => {
-                const user = userCredentials.user
-                await setDoc(doc(db, "users", docRef), {
-                    uid: user.uid,
-                    email: email,
-                    pseudo: pseudo,
-                });
-                console.log('Registered in with : ' + user.email)
-                navigation.navigate('Login')
-            })
-            .catch(error => alert(error.message))
     }
 
     return (
@@ -87,7 +67,7 @@ export function RegisterScreen({ navigation, route }) {
                         </View>
                         <Pressable
                             style={[styles.button]}
-                            onPress={handleSignUp}
+                            onPress={() => { register(pseudo, email, password) }}
                         >
                             <Text style={[globalStyles.white, globalStyles.hongkong]}>Créer son compte</Text>
                         </Pressable>

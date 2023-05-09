@@ -6,6 +6,7 @@ import { db, auth } from "../../firebase";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AuthContext } from '../context/AuthContext';
+import { ProfileContext } from "../context/ProfileContext";
 
 LocaleConfig.locales['fr'] = {
     monthNames: [
@@ -47,26 +48,15 @@ LocaleConfig.defaultLocale = 'fr';
 export function ProfileScreen({ navigation, route }) {
 
     const [selected, setSelected] = useState('')
-    const [user, setUser] = useState()
+    const [user, setUser] = useState(null)
     const { logout } = useContext(AuthContext)
+    const { getUser } = useContext(AuthContext)
 
-    useEffect(() => {
-        async function getCurrentUser() {
-            let userToken = await AsyncStorage.getItem('userToken')
-            const q = query(collection(db, "users"), where("uid", "==", userToken));
+    // useEffect(() => {
+    //     let user = getUser()
 
-            const querySnapshot = await getDocs(q);
-            let userData
-            querySnapshot.forEach((doc) => {
-                // doc.data() is never undefined for query doc snapshots
-                userData = doc.data()
-            });
-
-            return userData
-
-        }
-        getCurrentUser().then(setUser)
-    }, [])
+    //     setUser(user)
+    // }, [])
 
     return (
         <ScrollView style={{ backgroundColor: 'white' }} contentContainerStyle={globalStyles.center}>
@@ -89,7 +79,7 @@ export function ProfileScreen({ navigation, route }) {
                 </View>
                 <View style={[globalStyles.fullScreen, styles.bubbleContainer]}>
                     <Text style={[globalStyles.hongkong, { fontSize: 10 }]}>
-                        {user && user.bio}COucoucoucoucoucoucou
+                        {user && user.bio}
                     </Text>
                 </View>
                 <View style={[globalStyles.fullScreen, styles.bubbleContainer]}>
