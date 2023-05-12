@@ -1,12 +1,8 @@
-import { useEffect, useState, useContext } from "react";
+import { useState, useContext } from "react";
 import { View, Text, Image, Pressable, StyleSheet, ScrollView, ImageBackground } from "react-native";
 import globalStyles from "../../assets/globalStyle";
 import { Calendar, CalendarList, LocaleConfig } from 'react-native-calendars';
-import { db, auth } from "../../firebase";
-import { collection, query, where, getDocs } from "firebase/firestore";
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AuthContext } from '../context/AuthContext';
-import { ProfileContext } from "../context/ProfileContext";
 
 LocaleConfig.locales['fr'] = {
     monthNames: [
@@ -48,41 +44,54 @@ LocaleConfig.defaultLocale = 'fr';
 export function ProfileScreen({ navigation, route }) {
 
     const [selected, setSelected] = useState('')
-    const [user, setUser] = useState(null)
     const { logout } = useContext(AuthContext)
-    const { getUser } = useContext(AuthContext)
-
-    // useEffect(() => {
-    //     let user = getUser()
-
-    //     setUser(user)
-    // }, [])
+    const { userData } = useContext(AuthContext)
 
     return (
         <ScrollView style={{ backgroundColor: 'white' }} contentContainerStyle={globalStyles.center}>
-            <ImageBackground source={''} style={[styles.header, globalStyles.center]}>
-                <View style={[styles.bubble, globalStyles.center]}>
-                    <Text style={[globalStyles.white, globalStyles.hongkong, { fontSize: 21, textAlign: 'center' }]}>23</Text>
-                    <Text style={[globalStyles.white, globalStyles.hongkong, { fontSize: 13, textAlign: 'center' }]}>Parties</Text>
-                </View>
-                <View style={[styles.bubble, globalStyles.center, styles.image]}>
-                    <Image style={{ width: '100%', height: '100%', borderRadius: 100 }} source={require('../../assets/img/logo-vert.jpg')} />
-                </View>
-                <View style={[styles.bubble, globalStyles.center]}>
-                    <Text style={[globalStyles.white, globalStyles.hongkong, { fontSize: 21, textAlign: 'center' }]}>16</Text>
-                    <Text style={[globalStyles.white, globalStyles.hongkong, { fontSize: 13, textAlign: 'center' }]}>Amis</Text>
+            <ImageBackground source={require('../../assets/img/backgroundProfile.png')}>
+                <View style={[styles.header, globalStyles.center]}>
+                    <View style={[styles.bubble, globalStyles.center]}>
+                        <View style={[globalStyles.fullScreen, globalStyles.center]}>
+                            <Text style={[globalStyles.white, globalStyles.hongkong, { fontSize: 18, textAlign: 'center' }]}>23</Text>
+                            <Text style={[globalStyles.white, globalStyles.hongkong, { fontSize: 11, textAlign: 'center' }]}>Parties</Text>
+                        </View>
+                        <View style={[globalStyles.fullScreen, globalStyles.center]}>
+                            <View backgroundColor={'white'} style={{ padding: 1, width: '100%' }}></View>
+                        </View>
+                        <View style={[globalStyles.fullScreen, globalStyles.center]}>
+                            <Text style={[globalStyles.white, globalStyles.hongkong, { fontSize: 18, textAlign: 'center' }]}>1</Text>
+                            <Text style={[globalStyles.white, globalStyles.hongkong, { fontSize: 11, textAlign: 'center' }]}>Publication</Text>
+                        </View>
+                    </View>
+                    <View style={[styles.bubble, globalStyles.center, styles.image]}>
+                        <Image style={{ width: '100%', height: '100%', borderRadius: 9000 }} source={require('../../assets/img/logo-vert.jpg')} />
+                    </View>
+                    <View style={[styles.bubble, globalStyles.center]}>
+                        <View style={[globalStyles.fullScreen, globalStyles.center]}>
+                            <Text style={[globalStyles.white, globalStyles.hongkong, { fontSize: 18, textAlign: 'center' }]}>23</Text>
+                            <Text style={[globalStyles.white, globalStyles.hongkong, { fontSize: 11, textAlign: 'center' }]}>Amies</Text>
+                        </View>
+                        <View style={[globalStyles.fullScreen, globalStyles.center]}>
+                            <View backgroundColor={'white'} style={{ padding: 1, width: '100%' }}></View>
+                        </View>
+                        <View style={[globalStyles.fullScreen, globalStyles.center]}>
+                            <Text style={[globalStyles.white, globalStyles.hongkong, { fontSize: 18, textAlign: 'center' }]}>21</Text>
+                            <Text style={[globalStyles.white, globalStyles.hongkong, { fontSize: 11, textAlign: 'center' }]}>Abonnements</Text>
+                        </View>
+                    </View>
                 </View>
             </ImageBackground>
             <View style={styles.detailsContainer}>
-                <View style={[globalStyles.fullScreen, styles.bubbleContainer]}>
-                    <Text style={[globalStyles.hongkong, { fontSize: 18, marginBottom: 15 }]}>{user && user.pseudo}</Text>
+                <View style={[globalStyles.fullScreen]}>
+                    <Text style={[globalStyles.hongkong, { fontSize: 18, marginBottom: 15 }]}>{userData && userData.pseudo}</Text>
                 </View>
-                <View style={[globalStyles.fullScreen, styles.bubbleContainer]}>
+                <View style={[globalStyles.fullScreen]}>
                     <Text style={[globalStyles.hongkong, { fontSize: 10 }]}>
-                        {user && user.bio}
+                        {userData && userData.bio}
                     </Text>
                 </View>
-                <View style={[globalStyles.fullScreen, styles.bubbleContainer]}>
+                <View style={[globalStyles.fullScreen]}>
                     <Text style={[globalStyles.hongkong, { fontSize: 10 }]}>Paris</Text>
                 </View>
                 <View style={[globalStyles.fullScreen, styles.buttonContainer]}>
@@ -142,36 +151,38 @@ export function ProfileScreen({ navigation, route }) {
 
 const styles = StyleSheet.create({
     header: {
-        flex: 0.7,
         flexDirection: 'row',
         width: '100%',
-        backgroundColor: '#3E7B7A',
+        paddingVertical: '9%',
     },
     image: {
         width: 100,
         height: 100
     },
-    detailsContainer: {
-        flex: 0.5,
-        width: '100%',
-        paddingHorizontal: 50
-    },
-    bubbleContainer: {
-        justifyContent: 'center',
-        alignItems: 'flex-start'
-    },
     bubble: {
+        flex: 1,
         margin: 10,
         width: 80,
-        height: 80,
-        backgroundColor: '#36A971',
-        borderWidth: 1,
-        borderColor: 'white',
-        borderRadius: 100,
     },
-    bubbleContainer: {
-        justifyContent: 'center',
-        alignItems: 'flex-start'
+    detailsContainer: {
+        paddingVertical: '3%',
+        paddingHorizontal: '15%',
+        width: '100%',
+    },
+    badgesContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        marginBottom: '10%',
+        padding: 25,
+        width: '100%',
+        height: 250,
+        borderRadius: 500,
+        borderColor: '#c9c9c9',
+        borderBottomWidth: 3
+    },
+    badges: {
+        alignItems: 'center',
+        justifyContent: 'flex-start',
     },
     buttonContainer: {
         justifyContent: 'center',

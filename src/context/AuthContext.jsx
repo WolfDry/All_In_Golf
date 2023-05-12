@@ -2,7 +2,7 @@ import React, { createContext, useState, useEffect } from "react"
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { auth, db } from '../../firebase'
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth'
-import { doc, setDoc } from "firebase/firestore"
+import { doc, setDoc, collection, query, where, getDocs } from "firebase/firestore"
 import { strRandom } from '../../assets/func/random'
 
 export const AuthContext = createContext()
@@ -12,11 +12,10 @@ export const AuthProvider = ({ children }) => {
     const [isLoading, setIsLoading] = useState(false)
     const [isRegister, setIsRegister] = useState(false)
     const [userToken, setUserToken] = useState(null)
+    const [userData, setUserData] = useState(null)
 
     const login = (email, password) => {
-        if (isRegister)
-            setIsLoading(true)
-        setIsRegister(false)
+        setIsLoading(true)
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredentials) => {
                 const user = userCredentials.user
@@ -69,27 +68,28 @@ export const AuthProvider = ({ children }) => {
 
     const getUser = async () => {
         setIsLoading(true)
-        isLoggedIn()
-        console.log(userToken)
+        let userToken = await AsyncStorage.getItem('userToken')
         const q = query(collection(db, "users"), where("uid", "==", userToken));
-
         const querySnapshot = await getDocs(q);
         let userData
         querySnapshot.forEach((doc) => {
             // doc.data() is never undefined for query doc snapshots
             userData = doc.data()
         });
-
+        setUserData(userData)
         setIsLoading(false)
-        return userData
     }
 
     useEffect(() => {
         isLoggedIn()
     }, [])
 
+    useEffect(() => {
+        getUser()
+    }, [])
+
     return (
-        <AuthContext.Provider value={{ login, logout, register, getUser, isLoading, isRegister, userToken }}>
+        <AuthContext.Provider value={{ login, logout, register, getUser, isLoading, isRegister, userToken, userData }}>
             {children}
         </AuthContext.Provider>
     )
