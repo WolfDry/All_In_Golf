@@ -1,11 +1,12 @@
 import { StyleSheet } from 'react-native';
+import COLORS from '../src/const/colors';
 
 const globalStyles = StyleSheet.create({
   hongkong: {
     fontFamily: 'HongKong',
   },
   white: {
-    color: 'white',
+    color: COLORS.white,
   },
   center: {
     justifyContent: 'center',
@@ -24,7 +25,7 @@ const globalStyles = StyleSheet.create({
     borderRightWidth:0,
     borderLeftWidth:0,
     borderTopWidth:0,
-    borderBottomColor: 'white',
+    borderBottomColor: COLORS.white,
   }
 });
 

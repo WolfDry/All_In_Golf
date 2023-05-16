@@ -48,7 +48,7 @@ export function ProfileScreen({ navigation, route }) {
     const { userData } = useContext(AuthContext)
 
     return (
-        <ScrollView style={{ backgroundColor: 'white' }} contentContainerStyle={globalStyles.center}>
+        <ScrollView style={{ backgroundColor: 'white' }} contentContainerStyle={globalStyles.center} bounces={false}>
             <ImageBackground source={require('../../assets/img/backgroundProfile.png')}>
                 <View style={[styles.header, globalStyles.center]}>
                     <View style={[styles.bubble, globalStyles.center]}>
@@ -176,9 +176,6 @@ const styles = StyleSheet.create({
         padding: 25,
         width: '100%',
         height: 250,
-        borderRadius: 500,
-        borderColor: '#c9c9c9',
-        borderBottomWidth: 3
     },
     badges: {
         alignItems: 'center',

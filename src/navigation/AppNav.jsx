@@ -2,10 +2,12 @@ import React, { useContext } from 'react'
 import { NavigationContainer } from '@react-navigation/native';
 import { AuthStack } from './AuthStack';
 import { AuthContext } from '../context/AuthContext';
-import { ActivityIndicator, View } from 'react-native';
+import { ActivityIndicator, ImageBackground, View } from 'react-native';
 import globalStyles from '../../assets/globalStyle';
 import { AppStack } from './AppStack';
+import LottieView from 'lottie-react-native';
 import { LoginStack } from './LoginStack';
+import COLORS from '../const/colors';
 
 export function AppNav() {
 
@@ -16,8 +18,10 @@ export function AppNav() {
             <View style={[globalStyles.center, globalStyles.fullScreen]}>
                 <ActivityIndicator size={'large'} />
             </View>
-            // <View style={[globalStyles.fullScreen, globalStyles.center, { zIndex: 999 }]}>
-            //     <LottieView source={require('../../assets/loader/92907-golfer.json')} autoPlay loop />
+            // <View style={[globalStyles.fullScreen, globalStyles.center, { zIndex: 999, backgroundColor: COLORS.green }]}>
+            //     <ImageBackground source={require('../../assets/loader/backgroundLoader.png')}>
+            //         <LottieView source={require('../../assets/loader/loader.json')} autoPlay loop />
+            //     </ImageBackground>
             // </View>
         )
     }

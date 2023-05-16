@@ -1,22 +1,53 @@
-import React, { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { TextInput, Text, StyleSheet, View, Pressable, Image, ScrollView, ImageBackground, KeyboardAvoidingView } from 'react-native';
 import { useFonts } from 'expo-font';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import globalStyles from '../../assets/globalStyle';
 import { AuthContext } from '../context/AuthContext';
+import COLORS from '../const/colors'
+import Inputs from '../components/Inputs'
+import Button from '../components/Button'
 
-export function LoginScreen({ navigation, route }) {
+export function LoginScreen({ navigation }) {
 
-    const [email, setEmail] = React.useState('');
-    const [password, setPassword] = React.useState('');
     const { login } = useContext(AuthContext)
 
-    const [loaded] = useFonts({
-        Broadway: require('../../assets/fonts/broadway-normal.ttf')
+    const [inputs, setInputs] = useState({
+        pseudo: '',
+        email: '',
+        password: '',
     })
+    const [errors, setErrors] = useState({})
 
-    if (!loaded) {
-        return null
+    const validate = () => {
+        let valid = true;
+        if (!inputs.email) {
+            handleErrors("Email nécessaire", 'email')
+            valid = false
+        } else if (!inputs.email.match(/\S+@\S+\.\S+/)) {
+            handleErrors("Email incorrect", 'email')
+            valid = false
+        }
+
+        if (!inputs.password) {
+            handleErrors("Mot de passe nécessaire", 'password')
+            valid = false
+        } else if (inputs.password.length < 8) {
+            handleErrors("Mot de passe trop court", 'password')
+            valid = false
+        }
+
+        if (valid) {
+            login(inputs.email, inputs.password)
+        }
+    }
+
+    const handleOnchange = (text, input) => {
+        setInputs((prevState) => ({ ...prevState, [input]: text }))
+    }
+
+    const handleErrors = (errorMessage, input) => {
+        setErrors((prevState) => ({ ...prevState, [input]: errorMessage }))
     }
 
     return (
@@ -37,27 +68,24 @@ export function LoginScreen({ navigation, route }) {
                         </Text>
                     </View>
                     <View style={[globalStyles.center, { flex: 3, width: '100%' }]}>
-                        <View style={styles.inputContainer}>
-                            <TextInput
-                                placeholder="Email"
-                                style={[styles.inputs, globalStyles.hongkong]}
-                                value={email}
-                                onChangeText={setEmail}
-                            />
-                            <TextInput
-                                placeholder="Mot de passe"
-                                style={[styles.inputs, globalStyles.hongkong]}
-                                value={password}
-                                onChangeText={setPassword}
-                                secureTextEntry={true}
-                            />
-                        </View>
-                        <Pressable
-                            style={[styles.button,]}
-                            onPress={() => { login(email, password) }}
-                        >
-                            <Text style={[globalStyles.white, globalStyles.hongkong]}>Connexion</Text>
-                        </Pressable>
+                        <Inputs
+                            placeholder="Email"
+                            error={errors.email}
+                            onChangeText={text => handleOnchange(text, "email")}
+                            onFocus={() => {
+                                handleErrors(null, "email")
+                            }}
+                        />
+                        <Inputs
+                            placeholder="Mot de passe"
+                            error={errors.password}
+                            password
+                            onChangeText={text => handleOnchange(text, "password")}
+                            onFocus={() => {
+                                handleErrors(null, "password")
+                            }}
+                        />
+                        <Button title='Connexion' onPress={validate} />
                         <Pressable style={[globalStyles.fullScreen, globalStyles.center]}>
                             <Text style={[globalStyles.white, globalStyles.hongkong]}>
                                 Mot de passe oublié ?
