@@ -36,7 +36,7 @@ LocaleConfig.locales['fr'] = {
     monthNamesShort: ['Janv.', 'Févr.', 'Mars', 'Avril', 'Mai', 'Juin', 'Juil.', 'Août', 'Sept.', 'Oct.', 'Nov.', 'Déc.'],
     dayNames: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
     dayNamesShort: ['Dim.', 'Lun.', 'Mar.', 'Mer.', 'Jeu.', 'Ven.', 'Sam.'],
-    today: "Aujourd'hui"
+    today: 'Aujourd\'hui'
 };
 
 LocaleConfig.defaultLocale = 'fr';
@@ -46,6 +46,22 @@ export function ProfileScreen({ navigation, route }) {
     const [selected, setSelected] = useState('')
     const { logout } = useContext(AuthContext)
     const { userData } = useContext(AuthContext)
+
+    const handleSignUp = async () => {
+
+        try {
+            await AsyncStorage.setItem('@isLogin', 'false')
+        } catch (e) {
+            alert(e.message)
+        }
+
+        signOut(auth)
+            .then(() => {
+                console.log('SignOut')
+                navigation.navigate('Login')
+            })
+            .catch(error => alert(error.message))
+    }
 
     return (
         <ScrollView style={{ backgroundColor: 'white' }} contentContainerStyle={globalStyles.center} bounces={false}>
