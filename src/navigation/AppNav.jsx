@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import { NavigationContainer } from '@react-navigation/native';
 import { AuthStack } from './AuthStack';
 import { AuthContext } from '../context/AuthContext';
-import { ActivityIndicator, ImageBackground, View } from 'react-native';
+import { ImageBackground, View } from 'react-native';
 import globalStyles from '../../assets/globalStyle';
 import { AppStack } from './AppStack';
 import LottieView from 'lottie-react-native';
@@ -15,14 +15,14 @@ export function AppNav() {
 
     if (isLoading) {
         return (
-            <View style={[globalStyles.center, globalStyles.fullScreen]}>
-                <ActivityIndicator size={'large'} />
-            </View>
-            // <View style={[globalStyles.fullScreen, globalStyles.center, { zIndex: 999, backgroundColor: COLORS.green }]}>
-            //     <ImageBackground source={require('../../assets/loader/backgroundLoader.png')}>
-            //         <LottieView source={require('../../assets/loader/loader.json')} autoPlay loop />
-            //     </ImageBackground>
+            // <View style={[globalStyles.center, globalStyles.fullScreen]}>
+            //     <ActivityIndicator size={'large'} />
             // </View>
+            <View style={[globalStyles.fullScreen, globalStyles.center, { zIndex: 997, backgroundColor: COLORS.green }]}>
+                <ImageBackground style={[globalStyles.fullScreen, globalStyles.center, { zIndex: 998 }]} source={require('../../assets/loader/backgroundLoader.png')}>
+                    <LottieView style={{ zIndex: 999 }} source={require('../../assets/loader/loader.json')} autoPlay loop />
+                </ImageBackground>
+            </View>
         )
     }
 

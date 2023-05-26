@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { RegisterScreen } from '../views/RegisterScreen'
 import { HomeScreen } from '../views/HomeScreen'
 import { LoginScreen } from '../views/LoginScreen'

@@ -1,10 +1,8 @@
 import { useContext, useState } from 'react';
-import { TextInput, Text, StyleSheet, View, Pressable, Image, ScrollView, ImageBackground, KeyboardAvoidingView } from 'react-native';
-import { useFonts } from 'expo-font';
+import { Text, StyleSheet, View, Pressable, Image, ScrollView, ImageBackground, KeyboardAvoidingView } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import globalStyles from '../../assets/globalStyle';
 import { AuthContext } from '../context/AuthContext';
-import COLORS from '../const/colors'
 import Inputs from '../components/Inputs'
 import Button from '../components/Button'
 

@@ -1,7 +1,7 @@
 import { useState, useContext } from "react";
 import { View, Text, Image, Pressable, StyleSheet, ScrollView, ImageBackground } from "react-native";
 import globalStyles from "../../assets/globalStyle";
-import { Calendar, CalendarList, LocaleConfig } from 'react-native-calendars';
+import { Calendar, LocaleConfig } from 'react-native-calendars';
 import { AuthContext } from '../context/AuthContext';
 
 LocaleConfig.locales['fr'] = {
@@ -46,22 +46,6 @@ export function ProfileScreen({ navigation, route }) {
     const [selected, setSelected] = useState('')
     const { logout } = useContext(AuthContext)
     const { userData } = useContext(AuthContext)
-
-    const handleSignUp = async () => {
-
-        try {
-            await AsyncStorage.setItem('@isLogin', 'false')
-        } catch (e) {
-            alert(e.message)
-        }
-
-        signOut(auth)
-            .then(() => {
-                console.log('SignOut')
-                navigation.navigate('Login')
-            })
-            .catch(error => alert(error.message))
-    }
 
     return (
         <ScrollView style={{ backgroundColor: 'white' }} contentContainerStyle={globalStyles.center} bounces={false}>
